@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
         TextView mTxtSensors;
         SensorManager sensorMgr;
         List<Sensor> sensorList;
@@ -28,23 +28,20 @@ public class MainActivity extends AppCompatActivity {
         button = findViewById(R.id.retrieve_sensors_btn);
         //mTxtSensors.setMovementMethod(new ScrollingMovementMethod()); //textview 스크롤
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
-                sensorList = sensorMgr.getSensorList(Sensor.TYPE_ALL);
-
-                mTxtSensors.append("(# Sensors: " + sensorList.size() + ")\n\n");   //센서가 하나만 나오는게 아니고 계속 나오는거기 때문에 append씀
-
-                for(Sensor sensor : sensorList){
-                    mTxtSensors.append("Sensor name: " + sensor.getName()+ "\n");
-                    mTxtSensors.append("Sensor type: " + sensor.getType()+ "\n\n");
-                }
-            }
-        });
-
-
-
+        button.setOnClickListener(this);
         // 단순 정보만 조사하므로 onCreate에서 모든 작업 감당
+    }
+
+    @Override
+    public void onClick(View v) {
+        sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
+        sensorList = sensorMgr.getSensorList(Sensor.TYPE_ALL);
+
+        mTxtSensors.append("(# Sensors: " + sensorList.size() + ")\n\n");   //센서가 하나만 나오는게 아니고 계속 나오는거기 때문에 append씀
+
+        for(Sensor sensor : sensorList){
+            mTxtSensors.append("Sensor name: " + sensor.getName()+ "\n");
+            mTxtSensors.append("Sensor type: " + sensor.getType()+ "\n\n");
+        }
     }
 }

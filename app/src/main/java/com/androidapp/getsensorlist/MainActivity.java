@@ -7,15 +7,17 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
         TextView mTxtSensors;
         SensorManager sensorMgr;
         List<Sensor> sensorList;
+        Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,17 +25,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mTxtSensors = findViewById(R.id.txtSensors);
+        button = findViewById(R.id.retrieve_sensors_btn);
         //mTxtSensors.setMovementMethod(new ScrollingMovementMethod()); //textview 스크롤
 
-        sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
+                sensorList = sensorMgr.getSensorList(Sensor.TYPE_ALL);
 
-        sensorList = sensorMgr.getSensorList(Sensor.TYPE_ALL);
-        mTxtSensors.append("(# Sensors: " + sensorList.size() + ")\n\n");   //센서가 하나만 나오는게 아니고 계속 나오는거기 때문에 append씀
+                mTxtSensors.append("(# Sensors: " + sensorList.size() + ")\n\n");   //센서가 하나만 나오는게 아니고 계속 나오는거기 때문에 append씀
 
-        for(Sensor sensor : sensorList){
-            mTxtSensors.append("Sensor name: " + sensor.getName()+ "\n");
-            mTxtSensors.append("Sensor type: " + sensor.getType()+ "\n\n");
-        }
+                for(Sensor sensor : sensorList){
+                    mTxtSensors.append("Sensor name: " + sensor.getName()+ "\n");
+                    mTxtSensors.append("Sensor type: " + sensor.getType()+ "\n\n");
+                }
+            }
+        });
+
+
+
         // 단순 정보만 조사하므로 onCreate에서 모든 작업 감당
     }
 }
